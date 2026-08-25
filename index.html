@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Duburi Navid - Dive Deep. Discover More.</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <div class="screen-content">
+                <h1 class="game-title">DUBURI NAVID</h1>
+                <p class="subtitle">"Dive Deep. Discover More."</p>
+                <div class="menu-buttons">
+                    <button id="btn-start" class="menu-btn">Start Game</button>
+                    <button id="btn-how-to-play" class="menu-btn">How to Play</button>
+                    <button id="btn-sound-toggle" class="menu-btn">Sound: ON</button>
+                </div>
+                <div id="controls-info" class="controls-info">
+                    <h3>Controls</h3>
+                    <p>W / ↑ - Swim Up</p>
+                    <p>S / ↓ - Swim Down</p>
+                    <p>A / ← - Move Left</p>
+                    <p>D / → - Move Right</p>
+                    <p>ESC - Pause</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to Play Modal -->
+        <div id="how-to-play-modal" class="modal">
+            <div class="modal-content">
+                <h2>How to Play</h2>
+                <div class="instructions">
+                    <p><strong>Objective:</strong> Explore the deep ocean, collect treasures, and survive!</p>
+                    <p><strong>Collectibles:</strong></p>
+                    <ul>
+                        <li>🪙 Coin - +10 points</li>
+                        <li>💎 Treasure - +100 points</li>
+                        <li>🏺 Rare Artifact - +250 points</li>
+                        <li>👑 Bonus Treasure - +500 points</li>
+                        <li>💨 Oxygen Tank - Restores oxygen</li>
+                    </ul>
+                    <p><strong>Dangers:</strong></p>
+                    <ul>
+                        <li>🦈 Shark - Chases you when nearby</li>
+                        <li>🪼 Jellyfish - Floats vertically</li>
+                        <li>💣 Mine - Explodes on contact</li>
+                    </ul>
+                    <p><strong>Tips:</strong></p>
+                    <ul>
+                        <li>Watch your oxygen level!</li>
+                        <li>Collect oxygen tanks to survive longer</li>
+                        <li>Go deeper to discover new zones</li>
+                        <li>Avoid enemies to maintain health</li>
+                    </ul>
+                </div>
+                <button id="btn-close-modal" class="menu-btn">Got It!</button>
+            </div>
+        </div>
+
+        <!-- HUD -->
+        <div id="hud" class="hidden">
+            <div class="hud-top">
+                <div class="hud-section">
+                    <span class="hud-label">DUBURI NAVID</span>
+                </div>
+                <div class="hud-section">
+                    <span class="hud-label">Score</span>
+                    <span id="hud-score" class="hud-value">0</span>
+                </div>
+                <div class="hud-section">
+                    <span class="hud-label">Best</span>
+                    <span id="hud-best-score" class="hud-value">0</span>
+                </div>
+                <div class="hud-section">
+                    <span class="hud-label">Level</span>
+                    <span id="hud-level" class="hud-value">1</span>
+                </div>
+                <div class="hud-section">
+                    <span class="hud-label">Depth</span>
+                    <span id="hud-depth" class="hud-value">0m</span>
+                </div>
+            </div>
+            <div class="hud-bottom">
+                <div class="hud-bar-container">
+                    <span class="hud-label">Health</span>
+                    <div class="hud-bar">
+                        <div id="hud-health-bar" class="hud-bar-fill health-bar"></div>
+                    </div>
+                </div>
+                <div class="hud-bar-container">
+                    <span class="hud-label">Oxygen</span>
+                    <div class="hud-bar">
+                        <div id="hud-oxygen-bar" class="hud-bar-fill oxygen-bar"></div>
+                    </div>
+                </div>
+                <button id="btn-pause" class="pause-btn">⏸</button>
+            </div>
+        </div>
+
+        <!-- Pause Screen -->
+        <div id="pause-screen" class="screen hidden">
+            <div class="screen-content">
+                <h1 class="game-title">PAUSED</h1>
+                <div class="menu-buttons">
+                    <button id="btn-resume" class="menu-btn">Resume</button>
+                    <button id="btn-restart-pause" class="menu-btn">Restart</button>
+                    <button id="btn-main-menu-pause" class="menu-btn">Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen hidden">
+            <div class="screen-content">
+                <h1 class="game-title">GAME OVER</h1>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Final Score</span>
+                        <span id="go-final-score" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Best Score</span>
+                        <span id="go-best-score" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Max Depth</span>
+                        <span id="go-max-depth" class="stat-value">0m</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Level Reached</span>
+                        <span id="go-level" class="stat-value">1</span>
+                    </div>
+                </div>
+                <div class="menu-buttons">
+                    <button id="btn-play-again" class="menu-btn">Play Again</button>
+                    <button id="btn-main-menu-go" class="menu-btn">Main Menu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Controls -->
+        <div id="mobile-controls" class="hidden">
+            <div id="joystick-container">
+                <div id="joystick-base"></div>
+                <div id="joystick-stick"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
