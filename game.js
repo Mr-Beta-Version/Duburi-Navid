@@ -450,8 +450,8 @@ class Player {
         this.game = game;
         this.width = 50;
         this.height = 60;
-        this.x = 400;
-        this.y = 300;
+        this.x = game.canvas ? game.canvas.width / 2 : 400;
+        this.y = game.canvas ? game.canvas.height / 2 : 300;
         this.vx = 0;
         this.vy = 0;
         this.acceleration = 0.5;
@@ -467,12 +467,27 @@ class Player {
         this.facing = 1;
         this.swimFrame = 0;
         
+        // Load player image with proper path handling
         this.image = new Image();
-        this.image.src = 'duburi.jpeg';
+        this.image.crossOrigin = 'anonymous';
         this.imageLoaded = false;
+        
+        const loadImage = () => {
+            this.image.src = './duburi.jpeg';
+        };
+        
         this.image.onload = () => {
+            console.log('Player image loaded successfully');
             this.imageLoaded = true;
         };
+        
+        this.image.onerror = (e) => {
+            console.error('Failed to load player image from ./duburi.jpeg');
+            // Fallback: create a canvas-based diver
+            this.imageLoaded = false;
+        };
+        
+        loadImage();
     }
 
     update(input) {
@@ -572,7 +587,7 @@ class Player {
         // Swim bobbing
         const bobOffset = Math.sin(this.swimFrame) * 3;
         
-        if (this.imageLoaded) {
+        if (this.imageLoaded && this.image.complete && this.image.naturalWidth > 0) {
             ctx.drawImage(
                 this.image,
                 -this.width / 2,
@@ -581,14 +596,40 @@ class Player {
                 this.height
             );
         } else {
-            // Fallback diver shape
+            // Fallback diver shape - more detailed
+            // Body
             ctx.fillStyle = '#ff6b6b';
             ctx.beginPath();
             ctx.ellipse(0, bobOffset, 20, 30, 0, 0, Math.PI * 2);
             ctx.fill();
+            
+            // Helmet
             ctx.fillStyle = '#ffd700';
             ctx.beginPath();
             ctx.arc(0, bobOffset - 25, 12, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Visor
+            ctx.fillStyle = '#87ceeb';
+            ctx.beginPath();
+            ctx.ellipse(3, bobOffset - 25, 8, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Oxygen tank
+            ctx.fillStyle = '#silver';
+            ctx.fillRect(-15, bobOffset + 10, 30, 15);
+            
+            // Fins
+            ctx.fillStyle = '#ff6b6b';
+            ctx.beginPath();
+            ctx.moveTo(-10, bobOffset + 25);
+            ctx.lineTo(-20, bobOffset + 35);
+            ctx.lineTo(-5, bobOffset + 30);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.moveTo(10, bobOffset + 25);
+            ctx.lineTo(20, bobOffset + 35);
+            ctx.lineTo(5, bobOffset + 30);
             ctx.fill();
         }
         
@@ -839,6 +880,8 @@ class Game {
 
     startGame() {
         this.player = new Player(this);
+        console.log('Player created at:', this.player.x, this.player.y);
+        console.log('Canvas size:', this.canvas.width, this.canvas.height);
         this.collectibles = [];
         this.enemies = [];
         this.floatingTexts = [];
