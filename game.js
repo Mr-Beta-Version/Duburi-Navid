@@ -331,6 +331,7 @@ class Collectible {
         const screenY = this.y - cameraY + this.floatY;
         
         ctx.save();
+        ctx.fillStyle = '#ffffff';
         ctx.shadowColor = this.color;
         ctx.shadowBlur = 15;
         ctx.font = `${this.width}px Arial`;
@@ -417,6 +418,7 @@ class Enemy {
         const screenY = this.y - cameraY;
         
         ctx.save();
+        ctx.fillStyle = '#ffffff';
         ctx.shadowColor = '#ff4444';
         ctx.shadowBlur = 10;
         ctx.font = `${this.width}px Arial`;
@@ -469,7 +471,6 @@ class Player {
         
         // Load player image with proper path handling
         this.image = new Image();
-        this.image.crossOrigin = 'anonymous';
         this.imageLoaded = false;
         
         const loadImage = () => {
@@ -616,7 +617,7 @@ class Player {
             ctx.fill();
             
             // Oxygen tank
-            ctx.fillStyle = '#silver';
+            ctx.fillStyle = 'silver';
             ctx.fillRect(-15, bobOffset + 10, 30, 15);
             
             // Fins
@@ -1005,6 +1006,8 @@ class Game {
         document.getElementById('hud-best-score').textContent = this.highScore;
         document.getElementById('hud-level').textContent = this.level;
         document.getElementById('hud-depth').textContent = Math.floor(this.depth) + 'm';
+        
+        if (!this.player) return;
         
         const healthPercent = (this.player.health / this.player.maxHealth) * 100;
         document.getElementById('hud-health-bar').style.width = healthPercent + '%';
